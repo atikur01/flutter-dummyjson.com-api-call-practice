@@ -44,7 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
         _usernameController.text.trim(),
         _passwordController.text,
       );
-      AuthManager.login(AuthUserSession(
+
+      // Use async login method to save to secure storage
+      await AuthManager().login(AuthUserSession(
         id: user.id,
         username: user.username,
         email: user.email,

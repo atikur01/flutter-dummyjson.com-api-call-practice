@@ -71,20 +71,28 @@ class _UserListScreenState extends State<UserListScreen> {
   void _logout() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Logout'),
         content: const Text('Are you sure you want to logout?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              AuthManager.logout();
-              Navigator.pushAndRemoveUntil(
-                context,
+            onPressed: () async {
+              // Store navigator reference before async operations
+              final navigator = Navigator.of(context);
+
+              // Close dialog first
+              Navigator.pop(dialogContext);
+
+              // Use async logout to clear secure storage
+              await AuthManager().logout();
+
+              // Use stored navigator reference
+              navigator.pushAndRemoveUntil(
                 MaterialPageRoute(builder: (_) => const LoginScreen()),
                 (route) => false,
               );
