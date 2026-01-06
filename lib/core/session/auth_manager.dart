@@ -20,6 +20,12 @@ class AuthManager {
     await loadSession();
   }
 
+  // Clear session from secure storage
+  Future<void> logout() async {
+    currentUser = null;
+    await _storage.delete(key: _userSessionKey);
+  }
+
   // Load session from secure storage
   Future<void> loadSession() async {
     try {
@@ -39,12 +45,6 @@ class AuthManager {
     currentUser = user;
     final sessionJson = json.encode(user.toJson());
     await _storage.write(key: _userSessionKey, value: sessionJson);
-  }
-
-  // Clear session from secure storage
-  Future<void> logout() async {
-    currentUser = null;
-    await _storage.delete(key: _userSessionKey);
   }
 
   // Check if user is logged in
@@ -121,4 +121,3 @@ class AuthUserSession {
     );
   }
 }
-
